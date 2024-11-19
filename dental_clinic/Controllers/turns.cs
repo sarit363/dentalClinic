@@ -1,6 +1,5 @@
 ﻿using dental_clinic.entities;
 using Microsoft.AspNetCore.Mvc;
-using dental_clinic.Core.services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,18 +7,13 @@ namespace dental_clinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TurnsController : ControllerBase
+    public class turns : ControllerBase
     {
-        private readonly ITurnService _turnService;
-        public TurnsController(ITurnService turnService)
+        public readonly DataContext _context;
+        public turns(DataContext context)
         {
-            _turnService = turnService;
+            _context = context;
         }
-        //public readonly DataContext _context;
-        //public turns(DataContext context)
-        //{
-        //    _context = context;
-        //}
         //private static List<turn> Turn = new List<turn> {
         //    new turn{ Date="31.1.25",TurnNum=56,Time="5:30",Type="braces",DurantionOfTreatment=45,DoctorName="john fox"},
         //    new turn{ Date="12.2.25",TurnNum=98,Time="15:40",Type="root canal",DurantionOfTreatment=60,DoctorName="john fox"},
@@ -29,9 +23,9 @@ namespace dental_clinic.Controllers
         //};  
         // GET: api/<turns>
         [HttpGet]
-        public ActionResult Get()
+        public IEnumerable<turn> Get()
         {
-            return Ok(_turnService.GetList());
+            return _context.Turn;
         }
 
         // GET api/<turns>/5

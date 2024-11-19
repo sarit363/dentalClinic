@@ -7,8 +7,6 @@ namespace dental_clinic
         public List<dentist> Dentists { get; set;}
         public List<patient> Patients { get; set; }
         public List<turn> Turn { get; set; }
-        public List<turn> Turns { get; internal set; }
-
         public DataContext()
         {
             Dentists = new List<dentist>

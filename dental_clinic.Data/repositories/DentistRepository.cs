@@ -1,5 +1,4 @@
-﻿using dental_clinic.Core.reposetories;
-using dental_clinic.entities;
+﻿using dental_clinic.entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +7,12 @@ using System.Threading.Tasks;
 
 namespace dental_clinic.Data.repositories
 {
-    public class DentistRepository: IDentistRepository
+    public class DentistRepository
     {
-        private readonly DataContext _context;
-        public DentistRepository(DataContext context)
-        {
-           _context=context;
-        }
+        private readonly DataContext context = new DataContext();
         public List<dentist> GetAll()
         {
-            return _context.Dentists;
+            return context.Dentists;
         }
     }
 }

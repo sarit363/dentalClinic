@@ -1,6 +1,5 @@
 ﻿using dental_clinic.entities;
 using Microsoft.AspNetCore.Mvc;
-using dental_clinic.Core.services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,18 +7,13 @@ namespace dental_clinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PatientsController : ControllerBase
+    public class patients : ControllerBase
     {
-        private readonly IPatientService _patientService;
-        public PatientsController(IPatientService patientService)
+        public readonly DataContext _context;
+        public patients(DataContext context)
         {
-            _patientService = patientService;
+            _context = context;
         }
-        //public readonly DataContext _context;
-        //public patients(DataContext context)
-        //{
-        //    _context = context;
-        //}
         //private static List<patient> Patients = new List<patient> {
         //    new patient{Name="sarit gruzman",Id=123456789,Phone_number=0527644288,Status="adult",Email="nbjks@gmail.com",Address="desler 10,bnei brak"},
         //    new patient{Name="noa amir",Id=987654321,Phone_number=0548423265,Status="adult",Email="kjjbvsdk@gmail.com",Address="ben kuk,bnei brak"}
@@ -30,9 +24,9 @@ namespace dental_clinic.Controllers
         // GET: api/<patients>
         [HttpGet]
 
-        public ActionResult Get()
+        public IEnumerable<patient> Get()
         {
-            return Ok(_patientService.GetList());
+            return _context.Patients;
         }
 
         // GET api/<patients>/5
