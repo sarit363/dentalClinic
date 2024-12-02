@@ -8,5 +8,6 @@
         public string Type { get; set; }
         public int DurantionOfTreatment { get; set; }
         public string DoctorName { get; set; }
+        public int Id { get; set; }
     }
 }

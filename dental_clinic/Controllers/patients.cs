@@ -1,66 +1,104 @@
-﻿using dental_clinic.entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using dental_clinic.entities;
+using dental_clinic.Serivce;
+using dental_clinic.Core.services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace dental_clinic.Controllers
+namespace dental_clinic.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class patients : ControllerBase
+    public class PatientsController : ControllerBase
     {
-        public readonly DataContext _context;
-        public patients(DataContext context)
+        private readonly IPatientServices _patientService;
+        public PatientsController(IPatientServices patientService)
         {
-            _context = context;
+            _patientService = patientService;
         }
-        //private static List<patient> Patients = new List<patient> {
-        //    new patient{Name="sarit gruzman",Id=123456789,Phone_number=0527644288,Status="adult",Email="nbjks@gmail.com",Address="desler 10,bnei brak"},
-        //    new patient{Name="noa amir",Id=987654321,Phone_number=0548423265,Status="adult",Email="kjjbvsdk@gmail.com",Address="ben kuk,bnei brak"}
-        //    new patient{Name="ron popes",Id=215182932,Phone_number=0522244765,Status="child",Email="NULL",Address="YUTA 20,ramat gan"},
-        //    new patient{Name="peter dan",Id=123454321,Phone_number=0583270079,Status="adult",Email="hfdb6464@gmail.com",Address="yosei 19,bnei brak"}
-
-        //    };
-        // GET: api/<patients>
         [HttpGet]
 
-        public IEnumerable<patient> Get()
+        public ActionResult Get()
         {
-            return _context.Patients;
+            return Ok(_patientService.GetList());
         }
 
         // GET api/<patients>/5
         [HttpGet("{id}")]
-        public int GetId(int id)
+        public ActionResult Getid(int id)
         {
-            return id;
+            var den = _patientService.GetById(id);
+            if (den != null)
+            {
+                return Ok(den);
+            }
+            return NotFound();
         }
-
         // POST api/<patients>
         [HttpPost]
-        public patient Post([FromBody] patient value)
+        public ActionResult Post([FromBody] patient d)
         {
-            _context.Patients.Add(value);
-            return value;
+            var den = _patientService.GetById(d.Id);
+            if (den != null)
+            {
+                return Conflict();
+            }
+            _patientService.Add(d);
+            return Ok();
+
         }
 
         // PUT api/<patients>/5
         [HttpPut("{id}")]
-        public patient Put(int id, [FromBody] patient value)
+        public ActionResult Put(int id, [FromBody] patient value)
         {
-            var index= _context.Patients.FindIndex(e=> e.Id==id);
-            _context.Patients[index].Name = value.Name;
-            _context.Patients[index].Phone_number = value.Phone_number;
-            _context.Patients[index].Status = value.Status;
-            _context.Patients[index].Email = value.Email;
-            _context.Patients[index].Address = value.Address;
-            return _context.Patients[index];
+            var existingPatient = _patientService.GetById(id);
+
+            if (existingPatient == null)
+            {
+                return NotFound(); // אם הרופא לא נמצא, נחזיר שגיאה 404
+            }
+
+            try
+            {
+                // עדכון כל השדות של האובייקט הקיים לפי הערכים החדשים
+                existingPatient.Name = value.Name;
+                existingPatient.Status = value.Status;
+                existingPatient.Email = value.Email;
+                existingPatient.Address = value.Address;
+                existingPatient.Phone_number = value.Phone_number;
+                existingPatient.Id = value.Id;
+
+                // קריאה לשירות לעדכון הרופא
+                _patientService.Put(existingPatient);
+
+                return NoContent(); // החזרה של 204 במידה והעדכון עבר בהצלחה
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // DELETE api/<patients>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
+            var patient = _patientService.GetById(id);
+            if (patient == null)
+            {
+
+                return NotFound();
+            }
+            try
+            {
+                _patientService.Remove(patient);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

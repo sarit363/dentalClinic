@@ -1,4 +1,10 @@
 using dental_clinic.entities;
+using dental_clinic.Core.services;
+using dental_clinic.Serivce;
+using dental_clinic.Core.reposetories;
+using dental_clinic.Data.repositories;
+using dental_clinic;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +13,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IDentistServices, DentistService>();
+builder.Services.AddScoped<IDentistRepository, DentistRepository>();
+
+builder.Services.AddScoped<IPatientServices, PatientService>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+
+builder.Services.AddScoped<ITurnServices, TurnService>();
+builder.Services.AddScoped<ITurnRepository, TurnRepository>();
+
 
 builder.Services.AddSingleton<DataContext>();
 var app = builder.Build();

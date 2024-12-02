@@ -1,66 +1,105 @@
-﻿using dental_clinic.entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using dental_clinic.entities;
+using dental_clinic.Core.services;
+using dental_clinic.Serivce;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace dental_clinic.Controllers
+namespace dental_clinic.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class dentists : ControllerBase
+    public class DentistsController : ControllerBase
     {
-        public readonly DataContext _context;
-        public dentists(DataContext context)
+        private readonly IDentistServices _dentistService;
+        public DentistsController(IDentistServices dentistService)
         {
-            _context = context;
+            _dentistService = dentistService;
         }
-
-        //private static List<dentist> Dentists = new List<dentist> {
-        //new dentist{Name="john fox",Id=128856789,Phone_number=0527554288,Status="dentist",Email="nbjks@gmail.com",Salary=3000},
-        //new dentist{Name="harry gong",Id=128999789,Phone_number=0563554288,Status="doctor",Email="bnjks@gmail.com",Salary=6000},
-        //new dentist{Name="dan vec",Id=128888789,Phone_number=0577554288,Status="doctor",Email="nbjnms@gmail.com",Salary=4000}
-        //};
-        // GET: api/<dentists>
         [HttpGet]
 
-        public IEnumerable<dentist> Get()
+        public ActionResult Get()
         {
-            return _context.Dentists;
+            return Ok(_dentistService.GetList());
         }
-    
+
 
         // GET api/<dentists>/5
         [HttpGet("{id}")]
-        public int Getid(int id)
+        public ActionResult Getid(int id)
         {
-            return id;
+            var den = _dentistService.GetById(id);
+            if (den != null)
+            {
+                return Ok(den);
+            }
+            return NotFound();
         }
 
         // POST api/<dentists>
         [HttpPost]
-        public dentist Post([FromBody] dentist value)
+        public ActionResult Post([FromBody] dentist d)
         {
-            _context.Dentists.Add(value);
-            return value;
+            var den = _dentistService.GetById(d.Id);
+            if (den != null)
+            {
+                return Conflict();
+            }
+            _dentistService.Add(d);
+            return Ok();
         }
 
         // PUT api/<dentists>/5
         [HttpPut("{id}")]
-        public dentist Put(int id, [FromBody] dentist value)
+        public ActionResult Put(int id, [FromBody] dentist value)
         {
-            var index = _context.Dentists.FindIndex(e => e.Id == id);
-            _context.Dentists[index].Name = value.Name;
-            _context.Dentists[index].Phone_number = value.Phone_number;
-            _context.Dentists[index].Status = value.Status;
-            _context.Dentists[index].Email = value.Email;
-            _context.Dentists[index].Salary = value.Salary;
-            return _context.Dentists[index];
+            var existingDentist = _dentistService.GetById(id);
+
+            if (existingDentist == null)
+            {
+                return NotFound(); // אם הרופא לא נמצא, נחזיר שגיאה 404
+            }
+
+            try
+            {
+                // עדכון כל השדות של האובייקט הקיים לפי הערכים החדשים
+                existingDentist.Name = value.Name;
+                existingDentist.Status = value.Status;
+                existingDentist.Email = value.Email;
+                existingDentist.Salary = value.Salary;
+                existingDentist.Phone_number = value.Phone_number;
+                existingDentist.Id = value.Id;
+
+                // קריאה לשירות לעדכון הרופא
+                _dentistService.Put(existingDentist);
+
+                return NoContent(); // החזרה של 204 במידה והעדכון עבר בהצלחה
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // DELETE api/<dentists>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
+            var dentist = _dentistService.GetById(id);
+            if (dentist == null)
+            {
+
+                return NotFound();
+            }
+            try
+            {
+                _dentistService.Remove(dentist);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

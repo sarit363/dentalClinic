@@ -1,5 +1,7 @@
-﻿using dental_clinic.entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using dental_clinic.entities;
+using dental_clinic.Core.services;
+using dental_clinic.Serivce;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -7,59 +9,97 @@ namespace dental_clinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class turns : ControllerBase
+    public class TurnsController : ControllerBase
     {
-        public readonly DataContext _context;
-        public turns(DataContext context)
+        private readonly ITurnServices _turnService;
+        public TurnsController(ITurnServices turnService)
         {
-            _context = context;
+            _turnService = turnService;
         }
-        //private static List<turn> Turn = new List<turn> {
-        //    new turn{ Date="31.1.25",TurnNum=56,Time="5:30",Type="braces",DurantionOfTreatment=45,DoctorName="john fox"},
-        //    new turn{ Date="12.2.25",TurnNum=98,Time="15:40",Type="root canal",DurantionOfTreatment=60,DoctorName="john fox"},
-        //    new turn{ Date="08.8.25",TurnNum=86,Time="18:00",Type="crown",DurantionOfTreatment=25,DoctorName="harry gong"},
-        //    new turn{ Date="26.9.25",TurnNum=23,Time="8:30",Type="teeth cleaning",DurantionOfTreatment=15,DoctorName="dan vec"},
-        //    new turn{ Date="13.1.25",TurnNum=54,Time="12:20",Type="dentures",DurantionOfTreatment=30,DoctorName="harry gong"}
-        //};  
-        // GET: api/<turns>
         [HttpGet]
-        public IEnumerable<turn> Get()
+        public ActionResult Get()
         {
-            return _context.Turn;
+            return Ok(_turnService.GetList());
         }
 
         // GET api/<turns>/5
         [HttpGet("{id}")]
-        public int Getid(int turnnum)
+        public ActionResult Getid(int id)
         {
-            return turnnum;
+            var den = _turnService.GetById(id);
+            if (den != null)
+            {
+                return Ok(den);
+            }
+            return NotFound();
         }
 
         // POST api/<turns>
         [HttpPost]
-        public turn Post([FromBody] turn value)
+        public ActionResult Post([FromBody] turn d)
         {
-            _context.Turn.Add(value);
-            return value;
+            var den = _turnService.GetById(d.Id);
+            if (den != null)
+            {
+                return Conflict();
+            }
+            _turnService.Add(d);
+            return Ok();
+
         }
 
         // PUT api/<turns>/5
         [HttpPut("{id}")]
-        public turn Put(int turnnum, [FromBody] turn value)
+        public ActionResult Put(int id, [FromBody] turn value)
         {
-            var index = _context.Turn.FindIndex(e => e.TurnNum == turnnum);
-            _context.Turn[index].Date = value.Date;
-            _context.Turn[index].Time = value.Time;
-            _context.Turn[index].Type = value.Type;
-            _context.Turn[index].DurantionOfTreatment = value.DurantionOfTreatment;
-            _context.Turn[index].DoctorName = value.DoctorName;
-            return _context.Turn[index];
+            var existingTurn = _turnService.GetById(id);
+
+            if (existingTurn == null)
+            {
+                return NotFound(); // אם הרופא לא נמצא, נחזיר שגיאה 404
+            }
+
+            try
+            {
+                // עדכון כל השדות של האובייקט הקיים לפי הערכים החדשים
+                existingTurn.TurnNum = value.TurnNum;
+                existingTurn.Date = value.Date;
+                existingTurn.Time = value.Time;
+                existingTurn.Type = value.Type;
+                existingTurn.DurantionOfTreatment = value.DurantionOfTreatment;
+                existingTurn.DoctorName = value.DoctorName;
+                existingTurn.Id = value.Id;
+
+                // קריאה לשירות לעדכון הרופא
+                _turnService.Put(existingTurn);
+
+                return NoContent(); // החזרה של 204 במידה והעדכון עבר בהצלחה
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
 
         // DELETE api/<turns>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
+            var turn = _turnService.GetById(id);
+            if (turn == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                _turnService.Remove(turn);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
