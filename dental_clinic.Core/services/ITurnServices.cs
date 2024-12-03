@@ -9,8 +9,8 @@ namespace dental_clinic.Core.services
 {
     public interface ITurnServices
     {
-        public List<turn> GetList();
-        public turn GetById(int id);
+        public IEnumerable<turn> GetList();
+        public turn GetById(string id);
         public void Add(turn turn);
         public void Remove(turn turn);
         public void Put(turn updatedTurn);

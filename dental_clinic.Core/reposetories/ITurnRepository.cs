@@ -9,9 +9,9 @@ namespace dental_clinic.Core.reposetories
 {
     public interface ITurnRepository
     {
-        public List<turn> GetAll();
+        public IEnumerable<turn> GetAll();
         public void Add(turn turn);
-        public turn GetById(int id);
+        public turn GetById(string id);
         public void Remove(turn turn);
         public void Update(turn updatedTurn);
     }

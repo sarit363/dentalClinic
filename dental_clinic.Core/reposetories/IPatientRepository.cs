@@ -9,9 +9,9 @@ namespace dental_clinic.Core.reposetories
 {
     public interface IPatientRepository
     {
-        public List<patient> GetAll();
+        public IEnumerable<patient> GetAll();
         public void Add(patient patient);
-        public patient GetById(int id);
+        public patient GetById(string id);
         public void Remove(patient patient);
         public void Update(patient updatedPatient);
     }

@@ -1,4 +1,6 @@
-﻿namespace dental_clinic.entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace dental_clinic.entities
 {
     public class turn
     {
@@ -8,6 +10,7 @@
         public string Type { get; set; }
         public int DurantionOfTreatment { get; set; }
         public string DoctorName { get; set; }
-        public int Id { get; set; }
+        [Key]
+        public string Id { get; set; }
     }
 }

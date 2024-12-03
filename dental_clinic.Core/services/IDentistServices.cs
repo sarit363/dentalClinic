@@ -9,8 +9,8 @@ namespace dental_clinic.Core.services
 {
     public interface IDentistServices
     {
-        public List<dentist> GetList();
-        public dentist GetById(int id);
+        public IEnumerable<dentist> GetList();
+        public dentist GetById(string id);
         public void Add(dentist dentist);
         public void Remove(dentist dentist);
         public void Put(dentist updatedDentist);

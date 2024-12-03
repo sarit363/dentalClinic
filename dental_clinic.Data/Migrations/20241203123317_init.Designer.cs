@@ -11,7 +11,7 @@ using dental_clinic;
 namespace dental_clinic.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241203100552_init")]
+    [Migration("20241203123317_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,11 +25,8 @@ namespace dental_clinic.Data.Migrations
 
             modelBuilder.Entity("dental_clinic.entities.dentist", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -56,11 +53,8 @@ namespace dental_clinic.Data.Migrations
 
             modelBuilder.Entity("dental_clinic.entities.patient", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -88,11 +82,8 @@ namespace dental_clinic.Data.Migrations
 
             modelBuilder.Entity("dental_clinic.entities.turn", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Date")
                         .IsRequired()

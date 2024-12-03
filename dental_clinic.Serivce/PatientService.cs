@@ -16,11 +16,11 @@ namespace dental_clinic.Serivce
         {
             _patientRepository = patientRepository;
         }
-        public patient GetById(int id)
+        public patient GetById(string id)
         {
             return _patientRepository.GetById(id);
         }
-        public List<patient> GetList()
+        public IEnumerable<patient> GetList()
         {
             return _patientRepository.GetAll();
         }

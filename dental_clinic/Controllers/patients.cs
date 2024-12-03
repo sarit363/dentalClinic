@@ -25,7 +25,7 @@ namespace dental_clinic.Api.Controllers
 
         // GET api/<patients>/5
         [HttpGet("{id}")]
-        public ActionResult Getid(int id)
+        public ActionResult Getid(string id)
         {
             var den = _patientService.GetById(id);
             if (den != null)
@@ -50,7 +50,7 @@ namespace dental_clinic.Api.Controllers
 
         // PUT api/<patients>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] patient value)
+        public ActionResult Put(string id, [FromBody] patient value)
         {
             var existingPatient = _patientService.GetById(id);
 
@@ -82,7 +82,7 @@ namespace dental_clinic.Api.Controllers
 
         // DELETE api/<patients>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
             var patient = _patientService.GetById(id);
             if (patient == null)

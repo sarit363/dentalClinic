@@ -11,18 +11,19 @@ namespace dental_clinic.Data.repositories
     public class DentistRepository: IDentistRepository
     {
         private readonly DataContext _context = new DataContext();
-        public List<dentist> GetAll()
+        public IEnumerable<dentist> GetAll()
         {
-            return _context.Dentists.ToList();
+            return _context.Dentists;
         }
         public void Add(dentist entist)
         {
             _context.Dentists.Add(entist);
+            _context.SaveChanges();
         }
 
-        public dentist GetById(int id)
+        public dentist GetById(string id)
         {
-            return _context.Dentists.ToList().Find(x => x.Id == id);
+            return _context.Dentists.FirstOrDefault(x => x.Id == id);
         }
 
         public void Remove(dentist dentist)
@@ -53,6 +54,6 @@ namespace dental_clinic.Data.repositories
             }
         }
 
-
+      
     }
 }

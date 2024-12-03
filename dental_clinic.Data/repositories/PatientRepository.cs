@@ -12,15 +12,16 @@ namespace dental_clinic.Data.repositories
     public class PatientRepository : IPatientRepository
     {
         private readonly DataContext context = new DataContext();
-        public DbSet<patient> GetAll()
+        public IEnumerable<patient> GetAll()
         {   
             return context.Patients;
         }
         public void Add(patient patient)
         {
             context.Patients.Add(patient);
+            context.SaveChanges();
         }
-        public patient GetById(int id)
+        public patient GetById(string id)
         {
             return context.Patients.FirstOrDefault(p => p.Id == id);
         }
@@ -54,9 +55,5 @@ namespace dental_clinic.Data.repositories
             }
         }
 
-        List<patient> IPatientRepository.GetAll()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

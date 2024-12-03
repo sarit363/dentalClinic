@@ -24,7 +24,7 @@ namespace dental_clinic.Controllers
 
         // GET api/<turns>/5
         [HttpGet("{id}")]
-        public ActionResult Getid(int id)
+        public ActionResult Getid(string id)
         {
             var den = _turnService.GetById(id);
             if (den != null)
@@ -50,7 +50,7 @@ namespace dental_clinic.Controllers
 
         // PUT api/<turns>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] turn value)
+        public ActionResult Put(string id, [FromBody] turn value)
         {
             var existingTurn = _turnService.GetById(id);
 
@@ -84,7 +84,7 @@ namespace dental_clinic.Controllers
 
         // DELETE api/<turns>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
             var turn = _turnService.GetById(id);
             if (turn == null)

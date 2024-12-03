@@ -16,11 +16,11 @@ namespace dental_clinic.Serivce
         {
             _turnRepository = turnRepository;
         }
-        public turn GetById(int id)
+        public turn GetById(string id)
         {
             return _turnRepository.GetById(id);
         }
-        public List<turn> GetList()
+        public IEnumerable<turn> GetList()
         {
             return _turnRepository.GetAll();
         }
