@@ -24,7 +24,7 @@ builder.Services.AddScoped<ITurnServices, TurnService>();
 builder.Services.AddScoped<ITurnRepository, TurnRepository>();
 
 
-builder.Services.AddSingleton<DataContext>();
+builder.Services.AddDbContext<DataContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

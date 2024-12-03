@@ -1,5 +1,6 @@
 ﻿using dental_clinic.Core.reposetories;
 using dental_clinic.entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace dental_clinic.Data.repositories
     public class PatientRepository : IPatientRepository
     {
         private readonly DataContext context = new DataContext();
-        public List<patient> GetAll()
-        {
+        public DbSet<patient> GetAll()
+        {   
             return context.Patients;
         }
         public void Add(patient patient)
@@ -51,6 +52,11 @@ namespace dental_clinic.Data.repositories
             {
                 throw new KeyNotFoundException($"Dentist with ID {updatedPatient.Id} not found.");
             }
+        }
+
+        List<patient> IPatientRepository.GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }

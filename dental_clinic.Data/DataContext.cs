@@ -8,9 +8,7 @@ namespace dental_clinic
         public DbSet<dentist> Dentists { get; set; }
         public DbSet<patient> Patients { get; set; }
         public DbSet<turn> Turn { get; set; }
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
-        {
-        }
+        
 
         //public DataContext()
         //{
