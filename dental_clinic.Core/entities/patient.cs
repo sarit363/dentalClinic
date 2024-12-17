@@ -15,6 +15,8 @@ namespace dental_clinic.entities
 
         public string Address { get; set; }
         public string Identity { get; set; }
+        public string TurnId { get; set; }
+        public turn turn { get; set; }
 
     }
 }

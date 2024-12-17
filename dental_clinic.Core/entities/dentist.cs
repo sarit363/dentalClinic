@@ -16,5 +16,7 @@ namespace dental_clinic.entities
 
         public int Salary { get; set; }
         public string Identity { get; set; }
+        public ICollection<turn> turns { get; set; }
+        
     }
 }

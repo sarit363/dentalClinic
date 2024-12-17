@@ -1,5 +1,6 @@
 ﻿using dental_clinic.Core.reposetories;
 using dental_clinic.entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,16 @@ using System.Threading.Tasks;
 
 namespace dental_clinic.Data.repositories
 {
-    public class DentistRepository: IDentistRepository
+    public class DentistRepository : IDentistRepository
     {
         private readonly DataContext _context = new DataContext();
         public IEnumerable<dentist> GetAll()
         {
-            return _context.Dentists;
+            return _context.Dentists.Include(d => d.turns);
+        }
+        public IEnumerable<turn> GetList()
+        {
+            return _context.Turn.Include(u => u.DoctorName);
         }
         public void Add(dentist entist)
         {
@@ -54,6 +59,6 @@ namespace dental_clinic.Data.repositories
             }
         }
 
-      
+
     }
 }

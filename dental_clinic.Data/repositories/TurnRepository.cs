@@ -14,7 +14,7 @@ namespace dental_clinic.Data.repositories
         private readonly DataContext context=new DataContext();
         public IEnumerable<turn> GetAll()
         {
-            return context.Turn;
+            return context.Turn.Include(p => p.patient);
         }
         public void Add(turn turn)
         {

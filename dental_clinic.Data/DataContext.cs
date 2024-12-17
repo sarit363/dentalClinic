@@ -11,7 +11,7 @@ namespace dental_clinic
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=DentalClinic_db");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=DentalClinic_new_db");
             //optionsBuilder.LogTo(m => Console.WriteLine(m));
         }
 

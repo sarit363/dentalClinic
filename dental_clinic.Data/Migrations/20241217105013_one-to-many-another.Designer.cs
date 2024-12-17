@@ -11,8 +11,8 @@ using dental_clinic;
 namespace dental_clinic.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241203123317_init")]
-    partial class init
+    [Migration("20241217105013_one-to-many-another")]
+    partial class onetomanyanother
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,10 @@ namespace dental_clinic.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Identity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -64,6 +68,10 @@ namespace dental_clinic.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Identity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -75,7 +83,14 @@ namespace dental_clinic.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TurnId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TurnId")
+                        .IsUnique();
 
                     b.ToTable("Patients");
                 });
@@ -107,9 +122,48 @@ namespace dental_clinic.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("dentistId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("dentistId");
+
                     b.ToTable("Turn");
+                });
+
+            modelBuilder.Entity("dental_clinic.entities.patient", b =>
+                {
+                    b.HasOne("dental_clinic.entities.turn", "turn")
+                        .WithOne("patient")
+                        .HasForeignKey("dental_clinic.entities.patient", "TurnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("turn");
+                });
+
+            modelBuilder.Entity("dental_clinic.entities.turn", b =>
+                {
+                    b.HasOne("dental_clinic.entities.dentist", "dentist")
+                        .WithMany("turns")
+                        .HasForeignKey("dentistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("dentist");
+                });
+
+            modelBuilder.Entity("dental_clinic.entities.dentist", b =>
+                {
+                    b.Navigation("turns");
+                });
+
+            modelBuilder.Entity("dental_clinic.entities.turn", b =>
+                {
+                    b.Navigation("patient")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

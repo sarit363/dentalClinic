@@ -12,5 +12,9 @@ namespace dental_clinic.entities
         public string DoctorName { get; set; }
         [Key]
         public string Id { get; set; }
+        public patient patient { get; set; }
+        public dentist dentist { get; set; }
+
+
     }
 }

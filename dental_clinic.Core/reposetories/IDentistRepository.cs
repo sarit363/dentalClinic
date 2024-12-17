@@ -11,6 +11,7 @@ namespace dental_clinic.Core.reposetories
     {
         public IEnumerable<dentist> GetAll();
         public void Add(dentist entist);
+        public IEnumerable<turn> GetList();
         public dentist GetById(string id);
         public void Remove(dentist dentist);
         public void Update(dentist updatedDentist);
