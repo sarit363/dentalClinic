@@ -2,6 +2,7 @@
 using dental_clinic.entities;
 using dental_clinic.Core.services;
 using dental_clinic.Serivce;
+using dental_clinic.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,6 +13,7 @@ namespace dental_clinic.Api.Controllers
     public class DentistsController : ControllerBase
     {
         private readonly IDentistServices _dentistService;
+        
         public DentistsController(IDentistServices dentistService)
         {
             _dentistService = dentistService;
@@ -38,47 +40,29 @@ namespace dental_clinic.Api.Controllers
 
         // POST api/<dentists>
         [HttpPost]
-        public ActionResult Post([FromBody] dentist d)
+        public ActionResult Post([FromBody] dentistPostModels d)
         {
-            var den = _dentistService.GetById(d.Id);
+            var newDentist = new dentist { Name = d.Name, Phone_number = d.Phone_number, Status = d.Status, Email = d.Email, Salary = d.Salary, Identity = d.Identity };
+            var den = _dentistService.GetById(newDentist.Id);
             if (den != null)
             {
                 return Conflict();
             }
-            _dentistService.Add(d);
+            _dentistService.Add(newDentist);
             return Ok();
         }
 
         // PUT api/<dentists>/5
         [HttpPut("{id}")]
-        public ActionResult Put(string id, [FromBody] dentist value)
+        public ActionResult Put(int id, [FromBody] dentistPostModels d)
         {
-            var existingDentist = _dentistService.GetById(id);
-
-            if (existingDentist == null)
+            var newDentist = new dentist { Name = d.Name, Phone_number = d.Phone_number, Status = d.Status, Email = d.Email, Salary = d.Salary, Identity = d.Identity };
+            var dentist = _dentistService.Update(id, newDentist);
+            if (dentist != null)
             {
-                return NotFound(); // אם הרופא לא נמצא, נחזיר שגיאה 404
+                return Ok(dentist);
             }
-
-            try
-            {
-                // עדכון כל השדות של האובייקט הקיים לפי הערכים החדשים
-                existingDentist.Name = value.Name;
-                existingDentist.Status = value.Status;
-                existingDentist.Email = value.Email;
-                existingDentist.Salary = value.Salary;
-                existingDentist.Phone_number = value.Phone_number;
-                existingDentist.Id = value.Id;
-
-                // קריאה לשירות לעדכון הרופא
-                _dentistService.Put(existingDentist);
-
-                return NoContent(); // החזרה של 204 במידה והעדכון עבר בהצלחה
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return NotFound();
         }
 
         // DELETE api/<dentists>/5

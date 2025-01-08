@@ -13,6 +13,6 @@ namespace dental_clinic.Core.reposetories
         public void Add(patient patient);
         public patient GetById(string id);
         public void Remove(patient patient);
-        public void Update(patient updatedPatient);
+        public patient Update(int id, patient NewPatient);
     }
 }

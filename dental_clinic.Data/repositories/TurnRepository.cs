@@ -30,31 +30,21 @@ namespace dental_clinic.Data.repositories
         {
             context.Turn.Remove(turn);
         }
-        public void Update(turn updatedTurn)
+        public turn Update(string id, turn NewTurn)
         {
-            var existingTurn = context.Turn.FirstOrDefault(d => d.Id == updatedTurn.Id);
-
-            if (existingTurn != null)
+            var index = context.Turn.ToList().FindIndex(x => x.Id == id);
+            if (index != -1)
             {
-                // עדכון כל השדות של האובייקט הקיים לפי האובייקט החדש
-        
-                existingTurn.Date = updatedTurn.Date;
-                existingTurn.TurnNum = updatedTurn.TurnNum;
-                existingTurn.Time = updatedTurn.Time;
-                existingTurn.Type = updatedTurn.Type;
-                existingTurn.DurantionOfTreatment = updatedTurn.DurantionOfTreatment;
-                existingTurn.DoctorName = updatedTurn.DoctorName;
-                existingTurn.Id = updatedTurn.Id;
-
-
-
-                // שמירת העדכון בבסיס הנתונים
+                context.Turn.ToList()[index] = NewTurn;
                 context.SaveChanges();
+                return context.Turn.ToList()[index];
             }
-            else
-            {
-                throw new KeyNotFoundException($"Dentist with ID {updatedTurn.Id} not found.");
-            }
+            return null;
+        }
+
+        public turn Update(int id, turn NewTurn)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -13,6 +13,6 @@ namespace dental_clinic.Core.reposetories
         public void Add(turn turn);
         public turn GetById(string id);
         public void Remove(turn turn);
-        public void Update(turn updatedTurn);
+        public turn Update(int id, turn NewTurn);
     }
 }

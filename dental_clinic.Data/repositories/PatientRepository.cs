@@ -30,30 +30,21 @@ namespace dental_clinic.Data.repositories
         {
             context.Patients.Remove(patient);
         }
-        public void Update(patient updatedPatient)
+        public patient Update(string id, patient NewPatient)
         {
-            var existingPatient = context.Patients.FirstOrDefault(d => d.Id == updatedPatient.Id);
-
-            if (existingPatient != null)
+            var index = context.Patients.ToList().FindIndex(x => x.Id == id);
+            if (index != -1)
             {
-                // עדכון כל השדות של האובייקט הקיים לפי האובייקט החדש
-                existingPatient.Name = updatedPatient.Name;
-                existingPatient.Email = updatedPatient.Email;
-                existingPatient.Phone_number = updatedPatient.Phone_number;
-                existingPatient.Status = updatedPatient.Status;
-                existingPatient.Id = updatedPatient.Id;
-                existingPatient.Address = updatedPatient.Address;
-
-
-
-                // שמירת העדכון בבסיס הנתונים
+                context.Patients.ToList()[index] = NewPatient;
                 context.SaveChanges();
+                return context.Patients.ToList()[index];
             }
-            else
-            {
-                throw new KeyNotFoundException($"Dentist with ID {updatedPatient.Id} not found.");
-            }
+            return null;
         }
 
+        public patient Update(int id, patient NewPatient)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using dental_clinic.entities;
 using dental_clinic.Serivce;
 using dental_clinic.Core.services;
+using dental_clinic.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -36,48 +37,30 @@ namespace dental_clinic.Api.Controllers
         }
         // POST api/<patients>
         [HttpPost]
-        public ActionResult Post([FromBody] patient d)
+        public ActionResult Post([FromBody] patientPostModels d)
         {
-            var den = _patientService.GetById(d.Id);
+            var newPatient = new patient { Name = d.Name, Address =  d.Address, Email = d.Email, Phone_number = d.Phone_number, Status = d.Status,Identity = d.Identity  };
+            var den = _patientService.GetById(newPatient.Id);
             if (den != null)
             {
                 return Conflict();
             }
-            _patientService.Add(d);
+            _patientService.Add(newPatient);
             return Ok();
 
         }
 
         // PUT api/<patients>/5
         [HttpPut("{id}")]
-        public ActionResult Put(string id, [FromBody] patient value)
+        public ActionResult Put(int id, [FromBody] patientPostModels d)
         {
-            var existingPatient = _patientService.GetById(id);
-
-            if (existingPatient == null)
+            var newPatient = new patient { Name = d.Name, Email = d.Email, Phone_number = d.Phone_number, Status = d.Status, Identity = d.Identity };
+            var patient = _patientService.Update(id, newPatient);
+            if (patient != null)
             {
-                return NotFound(); // אם הרופא לא נמצא, נחזיר שגיאה 404
+                return Ok(patient);
             }
-
-            try
-            {
-                // עדכון כל השדות של האובייקט הקיים לפי הערכים החדשים
-                existingPatient.Name = value.Name;
-                existingPatient.Status = value.Status;
-                existingPatient.Email = value.Email;
-                existingPatient.Address = value.Address;
-                existingPatient.Phone_number = value.Phone_number;
-                existingPatient.Id = value.Id;
-
-                // קריאה לשירות לעדכון הרופא
-                _patientService.Put(existingPatient);
-
-                return NoContent(); // החזרה של 204 במידה והעדכון עבר בהצלחה
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return NotFound();
         }
 
         // DELETE api/<patients>/5

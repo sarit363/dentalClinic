@@ -32,11 +32,15 @@ namespace dental_clinic.Serivce
         {
             _dentistRepository.Remove(_dentistRepository.GetById(dentist.Id));
         }
-        public void Put(dentist updatedDentist)
+        //public void Put(dentist updatedDentist)
+        //{
+        //    _dentistRepository.Update(updatedDentist);
+        //}
+        public dentist Update(int id, dentist dentist)
         {
-            _dentistRepository.Update(updatedDentist);
+            //לוגיקה
+            return _dentistRepository.Update(id, dentist);
         }
-
 
     }
 }

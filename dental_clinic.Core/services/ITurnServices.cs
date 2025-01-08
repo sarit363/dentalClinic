@@ -13,6 +13,6 @@ namespace dental_clinic.Core.services
         public turn GetById(string id);
         public void Add(turn turn);
         public void Remove(turn turn);
-        public void Put(turn updatedTurn);
+        public turn Update(int id, turn turn);
     }
 }

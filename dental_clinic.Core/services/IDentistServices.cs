@@ -13,6 +13,6 @@ namespace dental_clinic.Core.services
         public dentist GetById(string id);
         public void Add(dentist dentist);
         public void Remove(dentist dentist);
-        public void Put(dentist updatedDentist);
+        public dentist Update(int id, dentist dentist);
     }
 }

@@ -2,6 +2,7 @@
 using dental_clinic.entities;
 using dental_clinic.Core.services;
 using dental_clinic.Serivce;
+using dental_clinic.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -36,49 +37,30 @@ namespace dental_clinic.Controllers
 
         // POST api/<turns>
         [HttpPost]
-        public ActionResult Post([FromBody] turn d)
+        public ActionResult Post([FromBody] turnPostModels d)
         {
-            var den = _turnService.GetById(d.Id);
+            var newTurn = new turn { Date = d.Date, TurnNum = d.TurnNum, Time = d.Time, Type = d.Type, DurantionOfTreatment = d.DurantionOfTreatment, DoctorName = d.DoctorName };
+            var den = _turnService.GetById(newTurn.Id);
             if (den != null)
             {
                 return Conflict();
             }
-            _turnService.Add(d);
+            _turnService.Add(newTurn);
             return Ok();
 
         }
 
         // PUT api/<turns>/5
         [HttpPut("{id}")]
-        public ActionResult Put(string id, [FromBody] turn value)
+        public ActionResult Put(int id, [FromBody] turnPostModels d)
         {
-            var existingTurn = _turnService.GetById(id);
-
-            if (existingTurn == null)
+            var newTurn = new turn { Date = d.Date, TurnNum = d.TurnNum, Time = d.Time, Type = d.Type, DurantionOfTreatment = d.DurantionOfTreatment, DoctorName = d.DoctorName };
+            var turn = _turnService.Update(id, newTurn);
+            if (turn != null)
             {
-                return NotFound(); // אם הרופא לא נמצא, נחזיר שגיאה 404
+                return Ok(turn);
             }
-
-            try
-            {
-                // עדכון כל השדות של האובייקט הקיים לפי הערכים החדשים
-                existingTurn.TurnNum = value.TurnNum;
-                existingTurn.Date = value.Date;
-                existingTurn.Time = value.Time;
-                existingTurn.Type = value.Type;
-                existingTurn.DurantionOfTreatment = value.DurantionOfTreatment;
-                existingTurn.DoctorName = value.DoctorName;
-                existingTurn.Id = value.Id;
-
-                // קריאה לשירות לעדכון הרופא
-                _turnService.Put(existingTurn);
-
-                return NoContent(); // החזרה של 204 במידה והעדכון עבר בהצלחה
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return NotFound();
         }
 
 
