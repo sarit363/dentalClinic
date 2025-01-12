@@ -3,6 +3,8 @@ using dental_clinic.entities;
 using dental_clinic.Core.services;
 using dental_clinic.Serivce;
 using dental_clinic.Models;
+using dental_clinic.Core.DTOs;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,16 +15,19 @@ namespace dental_clinic.Api.Controllers
     public class DentistsController : ControllerBase
     {
         private readonly IDentistServices _dentistService;
-        
-        public DentistsController(IDentistServices dentistService)
+        private readonly IMapper _mapper;
+        public DentistsController(IDentistServices dentistService, IMapper map)
         {
             _dentistService = dentistService;
+            _mapper = map;
         }
         [HttpGet]
 
         public ActionResult Get()
         {
-            return Ok(_dentistService.GetList());
+            var dentistList = _dentistService.GetList();
+            var dentists = _mapper.Map<IEnumerable<dentistDto>>(dentistList);
+            return Ok(dentists);
         }
 
 
@@ -30,10 +35,11 @@ namespace dental_clinic.Api.Controllers
         [HttpGet("{id}")]
         public ActionResult Getid(string id)
         {
-            var den = _dentistService.GetById(id);
-            if (den != null)
+            var dent = _dentistService.GetById(id);
+            var dentist = _mapper.Map<dentistDto>(dent);
+            if (dent != null)
             {
-                return Ok(den);
+                return Ok(dentist);
             }
             return NotFound();
         }

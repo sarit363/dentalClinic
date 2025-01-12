@@ -3,6 +3,8 @@ using dental_clinic.entities;
 using dental_clinic.Core.services;
 using dental_clinic.Serivce;
 using dental_clinic.Models;
+using dental_clinic.Core.DTOs;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,24 +15,29 @@ namespace dental_clinic.Controllers
     public class TurnsController : ControllerBase
     {
         private readonly ITurnServices _turnService;
-        public TurnsController(ITurnServices turnService)
+        private readonly IMapper _mapper;
+        public TurnsController(ITurnServices turnService, IMapper map)
         {
             _turnService = turnService;
+            _mapper = map;
         }
         [HttpGet]
         public ActionResult Get()
         {
-            return Ok(_turnService.GetList());
+            var turnsList = _turnService.GetList();
+            var turns = _mapper.Map<IEnumerable<turnDto>>(turnsList);
+            return Ok(turns);
         }
 
         // GET api/<turns>/5
         [HttpGet("{id}")]
         public ActionResult Getid(string id)
         {
-            var den = _turnService.GetById(id);
-            if (den != null)
+            var trn = _turnService.GetById(id);
+            var turn = _mapper.Map<turnDto>(trn);
+            if (trn != null)
             {
-                return Ok(den);
+                return Ok(turn);
             }
             return NotFound();
         }

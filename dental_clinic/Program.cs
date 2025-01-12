@@ -5,6 +5,7 @@ using dental_clinic.Core.reposetories;
 using dental_clinic.Data.repositories;
 using dental_clinic;
 using System.Text.Json.Serialization;
+using dental_clinic.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,7 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<ITurnServices, TurnService>();
 builder.Services.AddScoped<ITurnRepository, TurnRepository>();
 
-
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddDbContext<DataContext>();
 var app = builder.Build();
 
