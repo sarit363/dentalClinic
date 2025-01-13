@@ -13,6 +13,6 @@ namespace dental_clinic.Core.services
         public dentist GetById(string id);
         public Task AddAsync(dentist dentist);
         public void Remove(dentist dentist);
-        public dentist Update(int id, dentist dentist);
+        public Task<dentist> UpdateAsync(string id, dentist dentist);
     }
 }

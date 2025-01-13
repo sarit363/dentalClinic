@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,16 +36,17 @@ namespace dental_clinic.Data.repositories
         {
             _context.Dentists.Remove(dentist);
         }
-        public dentist Update(string id, dentist NewDentist)
+        public async Task<dentist> UpdateAsync(string id, dentist NewDentist)
         {
-            var index = _context.Dentists.ToList().FindIndex(x => x.Id == id);
-            if (index != -1)
+            var list = await _context.Dentists.ToListAsync();
+            var index = list.FindIndex(x => x.Id == id);
+            if (index == -1)
             {
-                _context.Dentists.ToList()[index] = NewDentist;
-                _context.SaveChanges();
-                return _context.Dentists.ToList()[index];
+                return null;
             }
-            return null;
+            list[index] = NewDentist;
+            _context.SaveChangesAsync();
+            return list[index];
         }
 
         public dentist Update(int id, dentist NewDentist)

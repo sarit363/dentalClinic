@@ -33,10 +33,10 @@ namespace dental_clinic.Serivce
         {
             _patientRepository.Remove(_patientRepository.GetById(patient.Id));
         }
-        public patient Update(int id, patient patient)
+        public async Task<patient> UpdateAsync(string id, patient patient)
         {
             //לוגיקה
-            return _patientRepository.Update(id, patient);
+            return await _patientRepository.UpdateAsync(id, patient);
         }
     }
 

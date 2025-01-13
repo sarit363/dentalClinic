@@ -36,10 +36,10 @@ namespace dental_clinic.Serivce
         //{
         //    _dentistRepository.Update(updatedDentist);
         //}
-        public dentist Update(int id, dentist dentist)
+        public async Task<dentist> UpdateAsync(string id, dentist dentist)
         {
             //לוגיקה
-            return _dentistRepository.Update(id, dentist);
+            return await _dentistRepository.UpdateAsync(id, dentist);
         }
 
     }

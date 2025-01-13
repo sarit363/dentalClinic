@@ -13,6 +13,6 @@ namespace dental_clinic.Core.services
         public Task<List<turn>> GetListAsync();
         public Task AddAsync(turn turn);
         public void Remove(turn turn);
-        public turn Update(int id, turn turn);
+        public Task<turn> UpdateAsync(string id, turn turn);
     }
 }

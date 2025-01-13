@@ -13,6 +13,6 @@ namespace dental_clinic.Core.reposetories
         public Task AddAsync(patient patient);
         public patient GetById(string id);
         public void Remove(patient patient);
-        public patient Update(int id, patient NewPatient);
+        public Task<patient> UpdateAsync(string id, patient NewPatient);
     }
 }

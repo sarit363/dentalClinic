@@ -59,10 +59,10 @@ namespace dental_clinic.Api.Controllers
 
         // PUT api/<patients>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] patientPostModels d)
+        public async Task<ActionResult> PutAsync(string id, [FromBody] patientPostModels d)
         {
             var newPatient = new patient { Name = d.Name, Email = d.Email, Phone_number = d.Phone_number, Status = d.Status, Identity = d.Identity };
-            var patient = _patientService.Update(id, newPatient);
+            var patient = await _patientService.UpdateAsync(id, newPatient);
             if (patient != null)
             {
                 return Ok(patient);

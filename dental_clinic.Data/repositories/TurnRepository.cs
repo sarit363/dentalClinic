@@ -30,16 +30,17 @@ namespace dental_clinic.Data.repositories
         {
             context.Turn.Remove(turn);
         }
-        public turn Update(string id, turn NewTurn)
+        public async Task<turn> UpdateAsync(string id, turn NewTurn)
         {
-            var index = context.Turn.ToList().FindIndex(x => x.Id == id);
-            if (index != -1)
+            var list = await context.Turn.ToListAsync();
+            var index = list.FindIndex(x => x.Id == id);
+            if (index == -1)
             {
-                context.Turn.ToList()[index] = NewTurn;
-                context.SaveChanges();
-                return context.Turn.ToList()[index];
+                return null;
             }
-            return null;
+            list[index] = NewTurn;
+            context.SaveChangesAsync();
+            return list[index];
         }
 
         public turn Update(int id, turn NewTurn)

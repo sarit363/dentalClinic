@@ -59,10 +59,10 @@ namespace dental_clinic.Controllers
 
         // PUT api/<turns>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] turnPostModels d)
+        public async Task<ActionResult> PutAsync(string id, [FromBody] turnPostModels d)
         {
             var newTurn = new turn { Date = d.Date, TurnNum = d.TurnNum, Time = d.Time, Type = d.Type, DurantionOfTreatment = d.DurantionOfTreatment, DoctorName = d.DoctorName };
-            var turn = _turnService.Update(id, newTurn);
+            var turn =await _turnService.UpdateAsync(id, newTurn);
             if (turn != null)
             {
                 return Ok(turn);

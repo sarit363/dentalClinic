@@ -30,16 +30,17 @@ namespace dental_clinic.Data.repositories
         {
             context.Patients.Remove(patient);
         }
-        public patient Update(string id, patient NewPatient)
+        public async Task<patient> UpdateAsync(string id, patient NewPatient)
         {
-            var index = context.Patients.ToList().FindIndex(x => x.Id == id);
-            if (index != -1)
+            var list = await context.Patients.ToListAsync();
+            var index = list.FindIndex(x => x.Id == id);
+            if (index == -1)
             {
-                context.Patients.ToList()[index] = NewPatient;
-                context.SaveChanges();
-                return context.Patients.ToList()[index];
+                return null;
             }
-            return null;
+            list[index] = NewPatient;
+            context.SaveChangesAsync();
+            return list[index];
         }
 
         public patient Update(int id, patient NewPatient)

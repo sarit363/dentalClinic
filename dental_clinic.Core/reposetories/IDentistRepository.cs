@@ -14,7 +14,7 @@ namespace dental_clinic.Core.reposetories
         public IEnumerable<turn> GetList();
         public dentist GetById(string id);
         public void Remove(dentist dentist);
-        public dentist Update(int id, dentist NewDentist);
+        public Task<dentist> UpdateAsync(string id, dentist NewDentist);
 
 
     }
