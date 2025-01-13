@@ -23,9 +23,9 @@ namespace dental_clinic.Api.Controllers
         }
         [HttpGet]
 
-        public ActionResult Get()
+        public async Task<ActionResult> Get()
         {
-            var dentistList = _dentistService.GetList();
+            var dentistList =await _dentistService.GetListAsync();
             var dentists = _mapper.Map<IEnumerable<dentistDto>>(dentistList);
             return Ok(dentists);
         }
@@ -46,7 +46,7 @@ namespace dental_clinic.Api.Controllers
 
         // POST api/<dentists>
         [HttpPost]
-        public ActionResult Post([FromBody] dentistPostModels d)
+        public async Task<ActionResult> Post([FromBody] dentistPostModels d)
         {
             var newDentist = new dentist { Name = d.Name, Phone_number = d.Phone_number, Status = d.Status, Email = d.Email, Salary = d.Salary, Identity = d.Identity };
             var den = _dentistService.GetById(newDentist.Id);
@@ -54,7 +54,7 @@ namespace dental_clinic.Api.Controllers
             {
                 return Conflict();
             }
-            _dentistService.Add(newDentist);
+            await _dentistService.AddAsync(newDentist);
             return Ok();
         }
 

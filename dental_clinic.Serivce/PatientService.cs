@@ -20,14 +20,14 @@ namespace dental_clinic.Serivce
         {
             return _patientRepository.GetById(id);
         }
-        public IEnumerable<patient> GetList()
+        public async Task<List<patient>> GetListAsync()
         {
-            return _patientRepository.GetAll();
+            return await _patientRepository.GetAllAsync();
         }
 
-        public void Add(patient patientA)
+        public async Task AddAsync(patient patientA)
         {
-            _patientRepository.Add(patientA);
+            await _patientRepository.AddAsync(patientA);
         }
         public void Remove(patient patient)
         {

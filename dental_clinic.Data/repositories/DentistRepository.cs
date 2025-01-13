@@ -12,18 +12,18 @@ namespace dental_clinic.Data.repositories
     public class DentistRepository : IDentistRepository
     {
         private readonly DataContext _context = new DataContext();
-        public IEnumerable<dentist> GetAll()
+        public async Task<List<dentist>> GetAllAsync()
         {
-            return _context.Dentists.Include(d => d.turns);
+            return await _context.Dentists.Include(d => d.turns).ToListAsync();
         }
         public IEnumerable<turn> GetList()
         {
             return _context.Turn.Include(u => u.DoctorName);
         }
-        public void Add(dentist entist)
+        public async Task AddAsync(dentist entist)
         {
             _context.Dentists.Add(entist);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public dentist GetById(string id)

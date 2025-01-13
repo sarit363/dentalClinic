@@ -9,8 +9,8 @@ namespace dental_clinic.Core.reposetories
 {
     public interface IDentistRepository
     {
-        public IEnumerable<dentist> GetAll();
-        public void Add(dentist entist);
+        public Task<List<dentist>> GetAllAsync();
+        public Task AddAsync(dentist entist);
         public IEnumerable<turn> GetList();
         public dentist GetById(string id);
         public void Remove(dentist dentist);

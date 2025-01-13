@@ -12,14 +12,14 @@ namespace dental_clinic.Data.repositories
     public class TurnRepository : ITurnRepository
     {
         private readonly DataContext context=new DataContext();
-        public IEnumerable<turn> GetAll()
+        public async Task<List<turn>> GetAllAsync()
         {
-            return context.Turn.Include(p => p.patient);
+            return await context.Turn.Include(p => p.patient).ToListAsync();
         }
-        public void Add(turn turn)
+        public async Task AddAsync(turn turn)
         {
             context.Turn.Add(turn);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
         public turn GetById(string id)
         {

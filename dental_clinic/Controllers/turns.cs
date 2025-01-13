@@ -22,9 +22,9 @@ namespace dental_clinic.Controllers
             _mapper = map;
         }
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult> Get()
         {
-            var turnsList = _turnService.GetList();
+            var turnsList =await _turnService.GetListAsync();
             var turns = _mapper.Map<IEnumerable<turnDto>>(turnsList);
             return Ok(turns);
         }
@@ -44,7 +44,7 @@ namespace dental_clinic.Controllers
 
         // POST api/<turns>
         [HttpPost]
-        public ActionResult Post([FromBody] turnPostModels d)
+        public async Task<ActionResult> Post([FromBody] turnPostModels d)
         {
             var newTurn = new turn { Date = d.Date, TurnNum = d.TurnNum, Time = d.Time, Type = d.Type, DurantionOfTreatment = d.DurantionOfTreatment, DoctorName = d.DoctorName };
             var den = _turnService.GetById(newTurn.Id);
@@ -52,7 +52,7 @@ namespace dental_clinic.Controllers
             {
                 return Conflict();
             }
-            _turnService.Add(newTurn);
+            await _turnService.AddAsync(newTurn);
             return Ok();
 
         }
