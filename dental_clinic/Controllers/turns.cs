@@ -46,13 +46,14 @@ namespace dental_clinic.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] turnPostModels d)
         {
-            var newTurn = new turn { Date = d.Date, TurnNum = d.TurnNum, Time = d.Time, Type = d.Type, DurantionOfTreatment = d.DurantionOfTreatment, DoctorName = d.DoctorName };
-            var den = _turnService.GetById(newTurn.Id);
+            var turn = _mapper.Map<turn>(d);
+            //var newTurn = new turn { Date = d.Date, TurnNum = d.TurnNum, Time = d.Time, Type = d.Type, DurantionOfTreatment = d.DurantionOfTreatment, DoctorName = d.DoctorName };
+            var den = _turnService.GetById(turn.Id);
             if (den != null)
             {
                 return Conflict();
             }
-            await _turnService.AddAsync(newTurn);
+            await _turnService.AddAsync(turn);
             return Ok();
 
         }
@@ -61,8 +62,9 @@ namespace dental_clinic.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PutAsync(string id, [FromBody] turnPostModels d)
         {
-            var newTurn = new turn { Date = d.Date, TurnNum = d.TurnNum, Time = d.Time, Type = d.Type, DurantionOfTreatment = d.DurantionOfTreatment, DoctorName = d.DoctorName };
-            var turn =await _turnService.UpdateAsync(id, newTurn);
+            var turnn = _turnService.UpdateAsync(id, _mapper.Map<turn>(d));
+            //var newTurn = new turn { Date = d.Date, TurnNum = d.TurnNum, Time = d.Time, Type = d.Type, DurantionOfTreatment = d.DurantionOfTreatment, DoctorName = d.DoctorName };
+            var turn =await _turnService.UpdateAsync(id, await turnn);
             if (turn != null)
             {
                 return Ok(turn);
@@ -73,16 +75,16 @@ namespace dental_clinic.Controllers
 
         // DELETE api/<turns>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
-            var turn = _turnService.GetById(id);
+            var turn =await _turnService.GetById(id);
             if (turn == null)
             {
                 return NotFound();
             }
             try
             {
-                _turnService.Remove(turn);
+               await _turnService.Remove(turn);
                 return NoContent();
             }
             catch (Exception ex)

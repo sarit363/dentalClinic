@@ -6,10 +6,47 @@ using dental_clinic.Data.repositories;
 using dental_clinic;
 using System.Text.Json.Serialization;
 using dental_clinic.Core;
+using dental_clinic.Middleware;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+Console.WriteLine(builder.Configuration["dClinic"]);
+
+
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Description = "Bearer Authentication with JWT Token",
+        Type = SecuritySchemeType.Http
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
+    });
+});
+
 
 
 builder.Services.AddControllers().AddJsonOptions(option =>
@@ -30,7 +67,7 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<ITurnServices, TurnService>();
 builder.Services.AddScoped<ITurnRepository, TurnRepository>();
 
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(typeof(MappingProfile), typeof(MappingProfile));
 builder.Services.AddDbContext<DataContext>();
 var app = builder.Build();
 
@@ -43,7 +80,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+
+//app.UseMiddleware<TrackMiddleware>();
+
+//app.UseMiddleware<IpBlockingMiddleware>();
+
+app.UseLogger();
 
 app.MapControllers();
 

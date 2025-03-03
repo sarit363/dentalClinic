@@ -27,9 +27,9 @@ namespace dental_clinic.Data.repositories
             await _context.SaveChangesAsync();
         }
 
-        public dentist GetById(string id)
+        public async Task<dentist> GetByIdAsync(string id)
         {
-            return _context.Dentists.FirstOrDefault(x => x.Id == id);
+            return await _context.Dentists.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void Remove(dentist dentist)

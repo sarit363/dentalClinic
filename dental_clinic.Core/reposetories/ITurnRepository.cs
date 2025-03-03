@@ -11,7 +11,7 @@ namespace dental_clinic.Core.reposetories
     {
         public Task<List<turn>> GetAllAsync();
         public Task AddAsync(turn turn);
-        public turn GetById(string id);
+        public Task<turn> GetByIdAsync(string id);
         public void Remove(turn turn);
         public Task<turn> UpdateAsync(string id, turn NewTurn);
     }

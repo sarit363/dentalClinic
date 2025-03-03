@@ -21,9 +21,9 @@ namespace dental_clinic.Data.repositories
             context.Turn.Add(turn);
             await context.SaveChangesAsync();
         }
-        public turn GetById(string id)
+        public async Task<turn> GetByIdAsync(string id)
         {
-            return context.Turn.FirstOrDefault(x => x.Id == id);
+            return await context.Turn.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void Remove(turn turn)

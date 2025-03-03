@@ -10,9 +10,9 @@ namespace dental_clinic.Core.services
     public interface IDentistServices
     {
         public Task<List<dentist>> GetListAsync();
-        public dentist GetById(string id);
+        public Task<dentist> GetById(string id);
         public Task AddAsync(dentist dentist);
-        public void Remove(dentist dentist);
+        public Task Remove(dentist dentist);
         public Task<dentist> UpdateAsync(string id, dentist dentist);
     }
 }

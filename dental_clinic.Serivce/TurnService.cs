@@ -16,9 +16,9 @@ namespace dental_clinic.Serivce
         {
             _turnRepository = turnRepository;
         }
-        public turn GetById(string id)
+        public async Task<turn> GetById(string id)
         {
-            return _turnRepository.GetById(id);
+            return await _turnRepository.GetByIdAsync(id);
         }
         public async Task<List<turn>> GetListAsync()
         {
@@ -29,9 +29,9 @@ namespace dental_clinic.Serivce
         {
             await _turnRepository.AddAsync(turn);
         }
-        public void Remove(turn turn)
+        public async Task Remove(turn turn)
         {
-            _turnRepository.Remove(_turnRepository.GetById(turn.Id));
+            _turnRepository.Remove(await _turnRepository.GetByIdAsync(turn.Id));
         }
         public async Task<turn> UpdateAsync(string id, turn turn)
         {

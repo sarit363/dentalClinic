@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using dental_clinic.Core.entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace dental_clinic.entities
 {
@@ -17,6 +18,7 @@ namespace dental_clinic.entities
         public string Identity { get; set; }
         public string TurnId { get; set; }
         public turn turn { get; set; }
-
+        public string UserId { get; set; }
+        public User user { get; set; }
     }
 }

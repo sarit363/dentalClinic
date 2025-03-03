@@ -5,6 +5,8 @@ using dental_clinic.Serivce;
 using dental_clinic.Models;
 using dental_clinic.Core.DTOs;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using dental_clinic.Core.entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,10 +18,12 @@ namespace dental_clinic.Api.Controllers
     {
         private readonly IDentistServices _dentistService;
         private readonly IMapper _mapper;
-        public DentistsController(IDentistServices dentistService, IMapper map)
+        private readonly IUserService _userService;
+        public DentistsController(IDentistServices dentistService, IMapper map, IUserService userService)
         {
             _dentistService = dentistService;
             _mapper = map;
+            _userService = userService;
         }
         [HttpGet]
 
@@ -29,7 +33,6 @@ namespace dental_clinic.Api.Controllers
             var dentists = _mapper.Map<IEnumerable<dentistDto>>(dentistList);
             return Ok(dentists);
         }
-
 
         // GET api/<dentists>/5
         [HttpGet("{id}")]
@@ -43,18 +46,24 @@ namespace dental_clinic.Api.Controllers
             }
             return NotFound();
         }
-
+         
         // POST api/<dentists>
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] dentistPostModels d)
         {
-            var newDentist = new dentist { Name = d.Name, Phone_number = d.Phone_number, Status = d.Status, Email = d.Email, Salary = d.Salary, Identity = d.Identity };
-            var den = _dentistService.GetById(newDentist.Id);
+            var user = new User { UserName = d.UserName, Password = d.Password, Role = eRole.dentist };
+            var User = await _userService.AddUserAsync(user);
+            var dentist = _mapper.Map<dentist>(d);
+            dentist.user = User;
+            dentist.UserId = User.Id;
+           
+            //var newDentist = new dentist { Name = d.Name, Phone_number = d.Phone_number, Status = d.Status, Email = d.Email, Salary = d.Salary, Identity = d.Identity };
+            var den =await _dentistService.GetById(dentist.Id);
             if (den != null)
             {
                 return Conflict();
             }
-            await _dentistService.AddAsync(newDentist);
+            await _dentistService.AddAsync(dentist);
             return Ok();
         }
 
@@ -62,8 +71,9 @@ namespace dental_clinic.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PutAsync(string id, [FromBody] dentistPostModels d)
         {
-            var newDentist = new dentist { Name = d.Name, Phone_number = d.Phone_number, Status = d.Status, Email = d.Email, Salary = d.Salary, Identity = d.Identity };
-            var dentist = await _dentistService.UpdateAsync(id, newDentist);
+            var dentistt = _dentistService.UpdateAsync(id, _mapper.Map<dentist>(d));
+            //var newDentist = new dentist { Name = d.Name, Phone_number = d.Phone_number, Status = d.Status, Email = d.Email, Salary = d.Salary, Identity = d.Identity };
+            var dentist = await _dentistService.UpdateAsync(id, await dentistt);
             if (dentist != null)
             {
                 return Ok(dentist);
@@ -73,9 +83,9 @@ namespace dental_clinic.Api.Controllers
 
         // DELETE api/<dentists>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
-            var dentist = _dentistService.GetById(id);
+            var dentist =await _dentistService.GetById(id);
             if (dentist == null)
             {
 
@@ -83,7 +93,7 @@ namespace dental_clinic.Api.Controllers
             }
             try
             {
-                _dentistService.Remove(dentist);
+              await  _dentistService.Remove(dentist);
                 return NoContent();
             }
             catch (Exception ex)

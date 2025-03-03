@@ -11,7 +11,8 @@ namespace dental_clinic.Core.reposetories
     {
         public Task<List<patient>> GetAllAsync();
         public Task AddAsync(patient patient);
-        public patient GetById(string id);
+        public Task<patient> GetByIdAsync(string id);
+
         public void Remove(patient patient);
         public Task<patient> UpdateAsync(string id, patient NewPatient);
     }

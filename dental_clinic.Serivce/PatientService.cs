@@ -16,9 +16,9 @@ namespace dental_clinic.Serivce
         {
             _patientRepository = patientRepository;
         }
-        public patient GetById(string id)
+        public async Task<patient> GetById(string id)
         {
-            return _patientRepository.GetById(id);
+            return await _patientRepository.GetByIdAsync(id);
         }
         public async Task<List<patient>> GetListAsync()
         {
@@ -29,9 +29,9 @@ namespace dental_clinic.Serivce
         {
             await _patientRepository.AddAsync(patientA);
         }
-        public void Remove(patient patient)
+        public async Task Remove(patient patient)
         {
-            _patientRepository.Remove(_patientRepository.GetById(patient.Id));
+            _patientRepository.Remove(await _patientRepository.GetByIdAsync(patient.Id));
         }
         public async Task<patient> UpdateAsync(string id, patient patient)
         {

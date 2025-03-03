@@ -16,9 +16,9 @@ namespace dental_clinic.Serivce
         {
             _dentistRepository = dentistRepository;
         }
-        public dentist GetById(string id)
+        public async Task<dentist> GetById(string id)
         {
-            return _dentistRepository.GetById(id);
+            return await _dentistRepository.GetByIdAsync(id);
         }
         public async Task<List<dentist>> GetListAsync()
         {
@@ -28,9 +28,10 @@ namespace dental_clinic.Serivce
         {
            await _dentistRepository.AddAsync(dentist);
         }
-        public void Remove(dentist dentist) 
+        public async Task Remove(dentist dentist) 
         {
-            _dentistRepository.Remove(_dentistRepository.GetById(dentist.Id));
+            //var den = await _dentistRepository.GetByIdAsync(dentist.Id);
+            _dentistRepository.Remove(await _dentistRepository.GetByIdAsync(dentist.Id));
         }
         //public void Put(dentist updatedDentist)
         //{

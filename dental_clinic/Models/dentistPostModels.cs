@@ -13,5 +13,7 @@ namespace dental_clinic.Models
 
         public int Salary { get; set; }
         public string Identity { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
     }
 }

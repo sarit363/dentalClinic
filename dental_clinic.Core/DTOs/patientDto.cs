@@ -19,5 +19,7 @@ namespace dental_clinic.Core.DTOs
 
         public string Address { get; set; }
         public string Identity { get; set; }
+
+        public string TurnId {  get; set; }
     }
 }

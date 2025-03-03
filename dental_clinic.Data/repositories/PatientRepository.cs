@@ -14,16 +14,16 @@ namespace dental_clinic.Data.repositories
         private readonly DataContext context = new DataContext();
         public async Task<List<patient>> GetAllAsync()
         {
-            return await context.Patients.Include(d => d.TurnId).ToListAsync();
+            return await context.Patients.ToListAsync();
         }
         public async Task AddAsync(patient patient)
         {
             context.Patients.Add(patient);
              await context.SaveChangesAsync();
         }
-        public patient GetById(string id)
+        public async Task<patient> GetByIdAsync(string id)
         {
-            return context.Patients.FirstOrDefault(p => p.Id == id);
+            return await context.Patients.FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public void Remove(patient patient)

@@ -12,7 +12,7 @@ namespace dental_clinic.Core.reposetories
         public Task<List<dentist>> GetAllAsync();
         public Task AddAsync(dentist entist);
         public IEnumerable<turn> GetList();
-        public dentist GetById(string id);
+        public Task<dentist> GetByIdAsync(string id);
         public void Remove(dentist dentist);
         public Task<dentist> UpdateAsync(string id, dentist NewDentist);
 
