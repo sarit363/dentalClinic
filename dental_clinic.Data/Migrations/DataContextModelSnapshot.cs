@@ -181,7 +181,7 @@ namespace dental_clinic.Data.Migrations
                     b.HasOne("dental_clinic.entities.turn", "turn")
                         .WithOne("patient")
                         .HasForeignKey("dental_clinic.entities.patient", "TurnId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("dental_clinic.Core.entities.User", "user")
@@ -200,7 +200,7 @@ namespace dental_clinic.Data.Migrations
                     b.HasOne("dental_clinic.entities.dentist", "dentist")
                         .WithMany("turns")
                         .HasForeignKey("dentistId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("dentist");

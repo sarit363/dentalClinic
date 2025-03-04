@@ -11,8 +11,8 @@ using dental_clinic;
 namespace dental_clinic.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250210124922_user-table")]
-    partial class usertable
+    [Migration("20250304093026_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -183,7 +183,7 @@ namespace dental_clinic.Data.Migrations
                     b.HasOne("dental_clinic.entities.turn", "turn")
                         .WithOne("patient")
                         .HasForeignKey("dental_clinic.entities.patient", "TurnId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("dental_clinic.Core.entities.User", "user")
@@ -202,7 +202,7 @@ namespace dental_clinic.Data.Migrations
                     b.HasOne("dental_clinic.entities.dentist", "dentist")
                         .WithMany("turns")
                         .HasForeignKey("dentistId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("dentist");

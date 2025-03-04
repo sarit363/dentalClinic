@@ -1,5 +1,6 @@
 ﻿using dental_clinic.Core.entities;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace dental_clinic.entities
 {
@@ -19,6 +20,7 @@ namespace dental_clinic.entities
         public string TurnId { get; set; }
         public turn turn { get; set; }
         public string UserId { get; set; }
+        [ForeignKey("UserId")]
         public User user { get; set; }
     }
 }
