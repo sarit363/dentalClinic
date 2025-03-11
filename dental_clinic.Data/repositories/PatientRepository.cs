@@ -43,9 +43,9 @@ namespace dental_clinic.Data.repositories
             return list[index];
         }
 
-        public patient Update(int id, patient NewPatient)
-        {
-            throw new NotImplementedException();
-        }
+        //public patient Update(int id, patient NewPatient)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

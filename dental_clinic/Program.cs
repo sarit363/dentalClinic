@@ -67,10 +67,14 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<ITurnServices, TurnService>();
 builder.Services.AddScoped<ITurnRepository, TurnRepository>();
 
-builder.Services.AddAutoMapper(typeof(MappingProfile), typeof(MappingProfile));
-builder.Services.AddDbContext<DataContext>();
-var app = builder.Build();
+builder.Services.AddAutoMapper(typeof(MappingPostModel), typeof(MappingProfile));
 
+builder.Services.AddDbContext<DataContext>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>(); // ודא שיש לך מחלקה כזו
+
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

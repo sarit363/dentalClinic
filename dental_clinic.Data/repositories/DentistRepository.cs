@@ -49,9 +49,9 @@ namespace dental_clinic.Data.repositories
             return list[index];
         }
 
-        public dentist Update(int id, dentist NewDentist)
-        {
-            throw new NotImplementedException();
-        }
+        //public dentist Update(string id, dentist NewDentist)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

@@ -43,5 +43,9 @@ namespace dental_clinic.Serivce
             return await _dentistRepository.UpdateAsync(id, dentist);
         }
 
+        //public Task<dentist> GetById(id)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

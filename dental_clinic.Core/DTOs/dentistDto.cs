@@ -9,9 +9,9 @@ namespace dental_clinic.Core.DTOs
 {
     public class dentistDto
     {
-        public string Name { get; set; }
+        public string Name { get; set; }                
         public string Id { get; set; }
-        public int Phone_number { get; set; }
+        public string Phone_number { get; set; }
 
         public string Status { get; set; }
 

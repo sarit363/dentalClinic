@@ -13,7 +13,7 @@ using dental_clinic.Core.entities;
 namespace dental_clinic.Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController]//id
     public class DentistsController : ControllerBase
     {
         private readonly IDentistServices _dentistService;
@@ -29,24 +29,24 @@ namespace dental_clinic.Api.Controllers
 
         public async Task<ActionResult> Get()
         {
-            var dentistList =await _dentistService.GetListAsync();
+            var dentistList = await _dentistService.GetListAsync();
             var dentists = _mapper.Map<IEnumerable<dentistDto>>(dentistList);
             return Ok(dentists);
         }
 
         // GET api/<dentists>/5
         [HttpGet("{id}")]
-        public ActionResult Getid(string id)
+        public async Task<ActionResult> Getid(string id)
         {
-            var dent = _dentistService.GetById(id);
-            var dentist = _mapper.Map<dentistDto>(dent);
+            var dent = await _dentistService.GetById(id); // הוסף await
             if (dent != null)
             {
+                var dentist = _mapper.Map<dentistDto>(dent);
                 return Ok(dentist);
             }
-            return NotFound();
+            return NotFound(); // אם לא נמצא, החזר NotFound
         }
-         
+
         // POST api/<dentists>
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] dentistPostModels d)
@@ -56,9 +56,9 @@ namespace dental_clinic.Api.Controllers
             var dentist = _mapper.Map<dentist>(d);
             dentist.user = User;
             dentist.UserId = User.Id;
-           
+
             //var newDentist = new dentist { Name = d.Name, Phone_number = d.Phone_number, Status = d.Status, Email = d.Email, Salary = d.Salary, Identity = d.Identity };
-            var den =await _dentistService.GetById(dentist.Id);
+            var den = await _dentistService.GetById(dentist.Id);
             if (den != null)
             {
                 return Conflict();
@@ -71,9 +71,7 @@ namespace dental_clinic.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PutAsync(string id, [FromBody] dentistPostModels d)
         {
-            var dentistt = _dentistService.UpdateAsync(id, _mapper.Map<dentist>(d));
-            //var newDentist = new dentist { Name = d.Name, Phone_number = d.Phone_number, Status = d.Status, Email = d.Email, Salary = d.Salary, Identity = d.Identity };
-            var dentist = await _dentistService.UpdateAsync(id, await dentistt);
+            var dentist = await _dentistService.UpdateAsync(id, _mapper.Map<dentist>(d)); // צריך לחכות עד לסיום הפעולה
             if (dentist != null)
             {
                 return Ok(dentist);
@@ -85,7 +83,7 @@ namespace dental_clinic.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
         {
-            var dentist =await _dentistService.GetById(id);
+            var dentist = await _dentistService.GetById(id);
             if (dentist == null)
             {
 
@@ -93,12 +91,12 @@ namespace dental_clinic.Api.Controllers
             }
             try
             {
-              await  _dentistService.Remove(dentist);
+                await _dentistService.Remove(dentist);
                 return NoContent();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"stringernal server error: {ex.Message}");
             }
         }
     }

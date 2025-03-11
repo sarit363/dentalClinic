@@ -17,6 +17,7 @@ namespace dental_clinic
             //optionsBuilder.LogTo(m => Console.WriteLine(m));
         }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<patient>()

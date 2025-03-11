@@ -43,9 +43,9 @@ namespace dental_clinic.Data.repositories
             return list[index];
         }
 
-        public turn Update(int id, turn NewTurn)
-        {
-            throw new NotImplementedException();
-        }
+        //public turn Update(int id, turn NewTurn)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

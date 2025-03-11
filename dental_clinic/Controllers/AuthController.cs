@@ -1,4 +1,5 @@
-﻿using dental_clinic.Core.services;
+﻿using dental_clinic.Core.entities;
+using dental_clinic.Core.services;
 using dental_clinic.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,27 +17,29 @@ namespace dental_clinic.Controllers
     [Authorize]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
-        private readonly IUserService _userService;
+        private readonly IConfiguration _configuration;                                         
+        private readonly IUserService _userService;                                     
 
         public AuthController(IConfiguration configuration, IUserService userService)
         {
-            _configuration = configuration;
+            _configuration = configuration;                     
             _userService = userService;
         }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            var user = await _userService.GetByUserNameAsync(loginModel.UserName, loginModel.Password);
+            // המר את ה-object ל-User
+            var user = await _userService.GetByUserNameAsync(loginModel.UserName, loginModel.Password) as User;
+
+            // אם המשתמש נמצא
             if (user != null)
             {
                 var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
-
-            };
+        {
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Role, user.Role.ToString()) // ודא ש-Role הוא טיפוס מתאים
+        };
 
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWT:Key")));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -50,8 +53,10 @@ namespace dental_clinic.Controllers
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
                 return Ok(new { Token = tokenString });
             }
-            return Unauthorized();
+
+            return Unauthorized(); // במקרה של משתמש לא נמצא
         }
+
     }
 
 }

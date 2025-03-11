@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using dental_clinic.Core.DTOs;
+using dental_clinic.Core.entities;
 using dental_clinic.entities;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,11 @@ namespace dental_clinic.Core
     {
         public MappingProfile()
         {
+            CreateMap<User, UserDto>().ReverseMap();
             CreateMap<dentist, dentistDto>().ReverseMap();
             CreateMap<patient, patientDto>().ReverseMap();
             CreateMap<turn, turnDto>().ReverseMap();
         }
     }
+
 }

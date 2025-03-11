@@ -10,10 +10,11 @@ namespace dental_clinic.Core.entities
     public class User
     {
         [Key]
-        public string Id { get; set; }
+        public string Id { get; set; } 
+
         public string UserName { get; set; }
-        public string Password {  get; set; }
-        public eRole Role {  get; set; }
+        public string Password { get; set; }
+        public eRole Role { get; set; }
     }
     public enum eRole
     {

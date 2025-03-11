@@ -9,7 +9,10 @@ namespace dental_clinic.Core.reposetories
 {
     public interface IUserRepository
     {
-        public Task<User> GetByUserNmaeAsync(string userName, string Paaword);
-        public Task<User> AddUserAsync(User user);
+        Task<List<User>> GetAllAsync();  // מחזיר את כל המשתמשים
+        User GetById(string id);  // מחזיר משתמש לפי מזהה
+        Task AddAsync(User user);  // מוסיף משתמש חדש
+        User Update(string id, User user);  // מעדכן משתמש קיים
+        Task Delete(string id);
     }
 }

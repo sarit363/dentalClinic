@@ -5,7 +5,7 @@ namespace dental_clinic.Models
     public class dentistPostModels
     {
         public string Name { get; set; }
-        public int Phone_number { get; set; }
+        public string Phone_number { get; set; }
 
         public string Status { get; set; }
 
