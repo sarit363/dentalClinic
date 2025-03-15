@@ -9,7 +9,7 @@ namespace dental_clinic
     {
         public MappingPostModel() 
         {
-            CreateMap<UserPostModel, User>().ReverseMap();
+            //CreateMap<UserPostModel, User>().ReverseMap();
             CreateMap<dentistPostModels, dentist>().ReverseMap();
             CreateMap<patientPostModels, patient>().ReverseMap();
             CreateMap<turnPostModels, dentist>().ReverseMap();
